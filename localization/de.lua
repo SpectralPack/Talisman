@@ -5,7 +5,7 @@ return {
                         Talisman = {
                                 name = "Talisman",
                                 text = {"Ein Mod, der das Punktelimit von Balatro erhöht", 
-					                    "und Punktewertung-Animationen überspringt."},
+					 "und Punktewertung-Animationen überspringt."},
                         }
                 }
         }, 
@@ -20,7 +20,7 @@ return {
         talisman_string_D = 'Berechne...',
         talisman_string_E = 'Abbrechen',
         talisman_string_F = 'Bisher berechnet: ',
-        talisman_string_G = 'Nich zu berechnende Karten: ',
+        talisman_string_G = 'Nicht zu berechnende Karten: ',
         talisman_string_H = 'Berechnung letzter gespielter Hand: ',
         talisman_string_I = 'Unbekannt',
 

@@ -1369,6 +1369,14 @@ payload = "text = localize{type='variable',key='a_xmult'..(to_big(amt)<to_big(0)
 match_indent = true
 
 [[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if amt > 0 or amt < 0 then"
+position = 'at'
+payload = "if to_big(amt) > to_big(0) or to_big(amt) < to_big(0) then"
+match_indent = true
+
+[[patches]]
 [patches.regex]
 target = '=[SMODS _ "src/utils.lua"]'
 pattern = 'key = amount > 0'

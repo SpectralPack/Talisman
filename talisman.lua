@@ -779,11 +779,13 @@ function Card:set_seal(a,b,immediate)
   return ss(self,a,b,Talisman.config_file.disable_anims and (Talisman.calculating_joker or Talisman.calculating_score or Talisman.calculating_card) or immediate)
 end
 
-function Card:get_chip_x_bonus()
-    if self.debuff then return 0 end
-    if self.ability.set == 'Joker' then return 0 end
-    if (SMODS.multiplicative_stacking(self.ability.x_chips or 1, self.ability.perma_x_chips or 0) or 0) <= 1 then return 0 end
-    return SMODS.multiplicative_stacking(self.ability.x_chips or 1, self.ability.perma_x_chips or 0)
+if not SMODS then
+  function Card:get_chip_x_bonus()
+      if self.debuff then return 0 end
+      if self.ability.set == 'Joker' then return 0 end
+      if (self.ability.x_chips or 0) <= 1 then return 0 end
+      return self.ability.x_chips
+  end
 end
 
 function Card:get_chip_e_bonus()

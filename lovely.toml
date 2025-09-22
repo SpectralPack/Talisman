@@ -217,6 +217,14 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
+pattern = "local delta = (type(vals[name]) == 'number' and type(G.GAME.current_round.current_hand[name]) == 'number') and (vals[name] - G.GAME.current_round.current_hand[name]) or 0"
+position = "at"
+payload = "local delta = (is_number(vals[name]) and is_number(G.GAME.current_round.current_hand[name])) and (vals[name] - G.GAME.current_round.current_hand[name]) or 0"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
 pattern = "local delta = (type(vals.chips) == 'number' and type(G.GAME.current_round.current_hand.chips) == 'number') and (vals.chips - G.GAME.current_round.current_hand.chips) or 0"
 position = "at"
 payload = "local delta = (is_number(vals.chips) and is_number(G.GAME.current_round.current_hand.chips)) and (vals.chips - G.GAME.current_round.current_hand.chips) or 0"

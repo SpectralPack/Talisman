@@ -53,10 +53,18 @@ end
 if SMODS.current_mod then
   function SMODS.current_mod.load_mod_config() end
   function SMODS.current_mod.save_mod_config() end
-  SMODS.current_mod.config_tab = Talisman.config_tab
-  SMODS.current_mod.debug_info = {
-    ["Break Infinity"] = Talisman.config_file.break_infinity
-  }
+  SMODS.current_mod.config_tab = function()
+    if Talisman and Talisman.config_tab then
+      return Talisman.config_tab()
+    end
+    return nil
+  end
+  SMODS.current_mod.debug_info = function()
+    if Talisman and Talisman.config_file then
+      return {["Break Infinity"] = Talisman.config_file.break_infinity}
+    end
+    return {}
+  end
   SMODS.current_mod.description_loc_vars = function()
     return { background_colour = G.C.CLEAR, text_colour = G.C.WHITE, scale = 1.2 }
   end

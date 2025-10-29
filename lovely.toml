@@ -1328,6 +1328,20 @@ match_indent = true
 # Fix some card_eval_status_text crashes
 [[patches]]
 [patches.pattern]
+target = "functions/common_events.lua"
+pattern = """
+text = (amt <-0.01 and '-' or '')..localize("$")..tostring(math.abs(amt))
+colour = amt <-0.01 and G.C.RED or G.C.MONEY
+"""
+position = "at"
+payload = """
+text = (to_big(amt) < to_big(-0.01) and '-' or '')..localize("$")..tostring(math.abs(amt))
+colour = to_big(amt) < to_big(-0.01) and G.C.RED or G.C.MONEY
+"""
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = 'functions/common_events.lua'
 pattern = "if amt > 0 or amt < 0 then"
 position = 'at'

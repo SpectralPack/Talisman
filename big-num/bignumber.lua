@@ -12,7 +12,7 @@ BigMeta.__index = Big
 --
 -- numbers are stored in the form `m * 10 ^ e`
 function Big:new(m, e)
-    if type(m) == "table" then
+    if is_big(m) then
         return setmetatable({m = m.m, e = m.e}, BigMeta):normalized()
     end
     if e == nil then e = 0 end
@@ -146,7 +146,7 @@ function Big:pow(pow)
 end
 
 function BigMeta.__pow(b1, n)
-    if type(n) == "table" then n = n:to_number() end
+    if is_big(n) then n = n:to_number() end
     if type(b1) ~= "table" then b1 = Big:new(b1) end
     return b1:pow(n)
 end

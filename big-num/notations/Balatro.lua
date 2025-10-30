@@ -16,7 +16,7 @@ function BalaNotation:format(n, places)
     --vanilla balatro number_format function basically
     local function e_ify(num)
         --if not num then return "0" end
-        if type(num) == "table" then
+        if is_big(num) then
             num = num:to_number()
         end
         if (num or 0) >= 10^6 then

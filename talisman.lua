@@ -232,6 +232,16 @@ function lenient_bignum(x)
   --prevent some log-related crashes
   local sns = score_number_scale
   function score_number_scale(scale, amt)
+    if Talisman.config_file.notation_key == "Balatro" then
+      if not is_number(amt) then return 0.7*(scale or 1) end
+      if to_big(amt) >= to_big(G.E_SWITCH_POINT) then
+        return 0.7*(scale or 1)
+      elseif to_big(amt) >= to_big(1000000) then
+        return 14*0.75/(math.floor(math.log(amt))+4)*(scale or 1)
+      else
+        return 0.75*(scale or 1)
+      end
+    end
     local ret = sns(scale, amt)
     if type(ret) == "table" then
       if ret > to_big(1e300) then return 1e300 end

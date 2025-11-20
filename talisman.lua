@@ -445,14 +445,14 @@ if Talisman.config_file.break_infinity then
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number.str or number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
+    elseif math.abs(to_big(number)) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
       if number:arraySize() <= 2 and (number.array[1] or 0) <= 999 then --gross hack
         scale = scale*math.floor(math.log(max*10, 10))/7 --this divisor is a constant so im precalcualting it
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(max) then
-      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(number*10, 10))
+    elseif math.abs(to_big(number)) >= to_big(max) then
+      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(math.abs(number)*10, 10))
     end
     local scale = math.min(3, scale:to_number())
     number.scale = scale

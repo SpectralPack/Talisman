@@ -221,7 +221,7 @@ if Talisman.config_file.break_infinity then
       return mc(x)
   end
 
-function lenient_bignum(x)
+  function lenient_bignum(x)
     if type(x) == "number" then return x end
     if to_big(x) < to_big(1e300) and to_big(x) > to_big(-1e300) then
       return x:to_number()
@@ -229,25 +229,39 @@ function lenient_bignum(x)
     return x
   end
 
-  --prevent some log-related crashes
-  local sns = score_number_scale
-  function score_number_scale(scale, amt)
-    if Talisman.config_file.notation_key == "Balatro" then
-      if not is_number(amt) then return 0.7*(scale or 1) end
-      if to_big(amt) >= to_big(G.E_SWITCH_POINT) then
-        return 0.7*(scale or 1)
-      elseif to_big(amt) >= to_big(1000000) then
-        return 14*0.75/(math.floor(math.log(amt))+4)*(scale or 1)
-      else
-        return 0.75*(scale or 1)
+  --despite the name, it only works best with m6x11plus\
+  --and only support the following characters: `0-9`, `e`, `{`, `}`, `,`,\
+  --`#` and `.` for the sake of number format simplicity
+  function tal_get_string_pixel_length(num)
+    if is_number(num) then
+      local num_text, length = number_format(num, G.E_SWITCH_POINT), 0
+      for i = 1, #num_text do
+        if string.sub(num_text, i, i) == "," or string.sub(num_text, i, i) == "." then
+          length = length + 3/6
+        elseif string.sub(num_text, i, i) == "{" or string.sub(num_text, i, i) == "}" then
+          length = length + 1
+        elseif string.sub(num_text, i, i) == "#" then
+          length = length + 8/6
+        else
+          length = length + 7/6
+        end
       end
+      return length
     end
-    local ret = sns(scale, amt)
-    if type(ret) == "table" then
-      if ret > to_big(1e300) then return 1e300 end
-      return ret:to_number()
+  end
+
+  -- I'm completely overriding this since I don't think any other mods
+  -- would alter a text scale adjustment function (HuyTheKiller)
+  function score_number_scale(scale, amt)
+    G.E_SWITCH_POINT = Notations[Talisman.config_file.notation_key or Talisman.default_notation].E_SWITCH_POINT or G.E_SWITCH_POINT or 100000000000
+    if not is_number(amt) then return 0.7*(scale or 1) end
+    if to_big(amt) >= to_big(G.E_SWITCH_POINT) or Talisman.config_file.notation_key ~= "Balatro" then
+      return math.min(6/math.floor(tal_get_string_pixel_length(amt)+1), 0.7)*(scale or 1)
+    elseif to_big(amt) >= to_big(1000000) then
+      return 14*0.75/(math.floor(math.log(amt))+4)*(scale or 1)
+    else
+      return 0.75*(scale or 1)
     end
-    return ret
   end
 
   local gftsj = G.FUNCS.text_super_juice

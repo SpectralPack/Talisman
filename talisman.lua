@@ -979,7 +979,7 @@ end
 local g_start_run = Game.start_run
 function Game:start_run(args)
   local ret = g_start_run(self, args)
-  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante)
+  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante, 1000000)
   return ret
 end
 

@@ -293,7 +293,7 @@ match_indent = true
 target = "functions/UI_definitions.lua"
 pattern = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = 2*scale}),id = 'ante_UI_count'}},"
 position = "at"
-payload = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante_disp'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100)}),id = 'ante_UI_count'}},--{n=G.UIT.T, config={text = number_format(G.GAME.round_resets.ante), lang = G.LANGUAGES['en-us'], scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100), colour = G.C.IMPORTANT, shadow = true,id = 'ante_UI_count'}},"
+payload = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante_disp'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100, 1000000)}),id = 'ante_UI_count'}},--{n=G.UIT.T, config={text = number_format(G.GAME.round_resets.ante, 1000000), lang = G.LANGUAGES['en-us'], scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100, 1000000), colour = G.C.IMPORTANT, shadow = true,id = 'ante_UI_count'}},"
 match_indent = true
 
 [[patches]]
@@ -309,7 +309,10 @@ match_indent = true
 target = "functions/common_events.lua"
 pattern = "G.GAME.round_resets.ante = G.GAME.round_resets.ante + mod"
 position = "after"
-payload = "G.GAME.round_resets.ante_disp = number_format(G.GAME.round_resets.ante)"
+payload = '''
+G.GAME.round_resets.ante_disp = number_format(G.GAME.round_resets.ante, 1000000)
+ante_UI.config.object.scale = scale_number(G.GAME.round_resets.ante, 0.8, 100, 1000000)
+'''
 match_indent = true
 
 [[patches]]

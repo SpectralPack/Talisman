@@ -138,7 +138,7 @@ function Big:compareTo(other)
     elseif (self_array_size<other_array_size) then
         r = -1;
     else
-        if self_array_size == 1 then 
+        if self_array_size == 1 then
             if self.array[1] > other.array[1]  then
                 return 1 * m
             elseif self.array[1] < other.array[1] then
@@ -610,7 +610,7 @@ function Big:create(input)
         return Big:new({input})
     elseif ((type(input) == "string")) then
         return Big:parse(input)
-    elseif ((type(input) == "table") and getmetatable(input) == OmegaMeta) then
+    elseif ((is_big(input)) and getmetatable(input) == OmegaMeta) then
         return input:clone()
     else
         return Big:new(input)
@@ -618,7 +618,7 @@ function Big:create(input)
 end
 
 function Big:ensureBig(input)
-    if ((type(input) == "table") and getmetatable(input) == OmegaMeta) then
+    if ((is_big(input)) and getmetatable(input) == OmegaMeta) then
         return input
     else
         return Big:create(input)
@@ -1135,7 +1135,7 @@ function Big:tetrate(other)
 end
 
 function Big:max_for_op(arrows)
-    if type(arrows) == "table" then
+    if is_big(arrows) then
         arrows = arrows:to_number()
     end
     if arrows < 1 or arrows ~= arrows or arrows == R.POSITIVE_INFINITY then
@@ -1158,7 +1158,7 @@ function Big:max_for_op(arrows)
         local limit = math.floor(math.log(arrows, 10))
         for i = 6, limit do
             arr[10^i] = 8
-        end 
+        end
     end
     arr[arrows - 1] = 8
 

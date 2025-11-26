@@ -173,7 +173,7 @@ pattern = "if not G.TAROT_INTERRUPT_PULSE then G.FUNCS.text_super_juice(e, math.
 position = "at"
 payload = '''
 local num = 0
-if to_big(is_number(G.GAME.current_round.current_hand.mult) and G.GAME.current_round.current_hand.mult or 1) > to_big(1e300) then 
+if to_big(is_number(G.GAME.current_round.current_hand.mult) and G.GAME.current_round.current_hand.mult or 1) > to_big(1e300) then
 	num = math.min(2,math.max(0,math.floor(math.log10(is_number(G.GAME.current_round.current_hand.mult) and G.GAME.current_round.current_hand.mult or 1))))
 else
 	num = 1e300
@@ -189,7 +189,7 @@ pattern = "if not G.TAROT_INTERRUPT_PULSE then G.FUNCS.text_super_juice(e, math.
 position = "at"
 payload = '''
 local num = 0
-if to_big(is_number(G.GAME.current_round.current_hand.chips) and G.GAME.current_round.current_hand.chips or 1) > to_big(1e300) then 
+if to_big(is_number(G.GAME.current_round.current_hand.chips) and G.GAME.current_round.current_hand.chips or 1) > to_big(1e300) then
 	num = math.min(2,math.max(0,math.floor(math.log10(is_number(G.GAME.current_round.current_hand.chips) and G.GAME.current_round.current_hand.chips or 1))))
 else
 	num = 1e300
@@ -329,10 +329,10 @@ position = "before"
 line_prepend = "$indent"
 payload = '''
 if Big then
-	if type(self.strings[k].W) == 'table' then
+	if is_big(self.strings[k].W) then
 		self.strings[k].W = to_number(self.strings[k].W)
 	end
-	if type(self.strings[k].H) == 'table' then
+	if is_big(self.strings[k].H) then
 		self.strings[k].H = to_number(self.strings[k].H)
 	end
 end
@@ -537,7 +537,7 @@ position = "at"
 payload = '''if to_big(card.unlock_condition.extra) <= to_big(G.GAME.dollars) then'''
 match_indent = true
 
-# Talisman compat for vanilla jokers 
+# Talisman compat for vanilla jokers
 [[patches]]
 [patches.pattern]
 target = "card.lua"
@@ -833,28 +833,28 @@ target = "functions/common_events.lua"
 pattern = "elseif eval_type == 'dollars' then"
 position = "before"
 payload = '''
-elseif eval_type == 'x_chips' then 
+elseif eval_type == 'x_chips' then
 	sound = 'talisman_xchip'
 	amt = amt
 	text = 'X' .. amt
 	colour = G.C.CHIPS
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'e_chips' then 
+elseif eval_type == 'e_chips' then
 	sound = 'talisman_echip'
 	amt = amt
 	text = '^' .. amt
 	colour = G.C.CHIPS
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'ee_chips' then 
+elseif eval_type == 'ee_chips' then
 	sound = 'talisman_eechip'
 	amt = amt
 	text = '^^' .. amt
 	colour = G.C.CHIPS
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'eee_chips' then 
+elseif eval_type == 'eee_chips' then
 	sound = 'talisman_eeechip'
 	amt = amt
 	text = '^^^' .. amt
@@ -868,28 +868,28 @@ elseif eval_type == 'hyper_chips' then
 	colour = G.C.CHIPS
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'e_mult' then 
+elseif eval_type == 'e_mult' then
 	sound = 'talisman_emult'
 	amt = amt
 	text = '^' .. amt .. ' ' .. localize('k_mult')
 	colour = G.C.MULT
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'ee_mult' then 
+elseif eval_type == 'ee_mult' then
 	sound = 'talisman_eemult'
 	amt = amt
 	text = '^^' .. amt .. ' ' .. localize('k_mult')
 	colour = G.C.MULT
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'eee_mult' then 
+elseif eval_type == 'eee_mult' then
 	sound = 'talisman_eeemult'
 	amt = amt
 	text = '^^^' .. amt .. ' ' .. localize('k_mult')
 	colour = G.C.MULT
 	config.type = 'fade'
 	config.scale = 0.7
-elseif eval_type == 'hyper_mult' then 
+elseif eval_type == 'hyper_mult' then
 	sound = 'talisman_eeemult'
 	text = (amt[1] > 5 and ('{' .. tostring(amt[1]) .. '}') or string.rep('^', amt[1])) .. tostring(amt[2]) .. ' ' .. localize('k_mult')
 	amt = amt[2]
@@ -1274,7 +1274,7 @@ target = 'functions/misc_functions.lua'
 pattern = "assembled_string = assembled_string..(type(subpart) == 'string' and subpart or args.vars[tonumber(subpart[1])] or 'ERROR')"
 position = 'before'
 payload = '''
-if not SMODS and type(subpart) ~= 'string' then 
+if not SMODS and type(subpart) ~= 'string' then
 	if type(args.vars[tonumber(subpart[ 1 ])]) ~= 'number' then
 		args.vars[tonumber(subpart[ 1 ])] = tostring(args.vars[tonumber(subpart[ 1 ])])
 	else
@@ -1443,7 +1443,7 @@ target = 'engine/sprite.lua'
 pattern = "G.SHADERS[_shader]:send(v.name, v.val or (v.func and v.func()) or v.ref_table[v.ref_value])"
 position = 'at'
 payload = '''local val = v.val or (v.func and v.func()) or v.ref_table[v.ref_value]
-if type(val) == "table" and is_number(val) then
+if is_big(val) and is_number(val) then
 	if val > to_big(1e300) then
 		val = 1e300
 	else
@@ -1460,14 +1460,14 @@ target = 'functions/misc_functions.lua'
 pattern = "AC[k].vol = (not G.video_organ and G.STATE == G.STATES.SPLASH) and 0 or AC[k].vol and v.volfunc(AC[k].vol) or 0"
 position = 'after'
 payload = '''
-if type(AC[k].vol) == "table" then
+if is_big(AC[k].vol) then
 	if AC[k].vol > to_big(1e300) then
 		AC[k].vol = 1e300
 	else
 		AC[k].vol = to_number(AC[k].vol)
 	end
 end
-if type(AC[k].per) == "table" then
+if is_big(AC[k].per) then
 	if AC[k].per > to_big(1e300) then
 		AC[k].per = 1e300
 	else
@@ -1482,7 +1482,7 @@ match_indent = true
 target = 'functions/button_callbacks.lua'
 pattern = "_F.intensity = ((G.pack_cards and not G.pack_cards.REMOVED) or (G.TAROT_INTERRUPT)) and 0 or math.max(0., math.log(G.ARGS.score_intensity.earned_score, 5)-2)"
 position = 'after'
-payload = '''if type(_F.intensity) == "table" then
+payload = '''if is_big(_F.intensity) then
 	if _F.intensity > to_big(1e300) then
 		_F.intensity = 1e300
 	else

@@ -195,6 +195,7 @@ if Talisman.config_file.break_infinity then
           if override_non_bigs then
             num = to_big(num)
           end
+          if type(num) == "string" then return num end
           if num.str then return num.str end
           if num:arraySize() > 2 then
             local str = Notations[Talisman.config_file.notation_key or Talisman.default_notation]:format(num, 3)
@@ -527,8 +528,12 @@ function is_number(x)
 end
 
 function to_big(x, y)
-  if type(x) == 'string' and x == "0" then --hack for when 0 is asked to be a bignumber need to really figure out the fix
-    return 0
+  if type(x) == 'string' then --hack for when 0 is asked to be a bignumber need to really figure out the fix
+    if x == "0" then
+      return 0
+    elseif x == "?" then -- another hack to deal with nontation commit's hacky method, turning all strings to bignumber
+      return x
+    end
   elseif Big and Big.m then
     local x = Big:new(x,y)
     return x

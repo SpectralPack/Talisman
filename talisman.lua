@@ -528,7 +528,7 @@ function is_number(x)
 end
 
 function to_big(x, y)
-  if type(x) == 'string' then --hack for when 0 is asked to be a bignumber need to really figure out the fix
+  if type(x) == 'string' and (x == '0' or x == '?') then --hack for when 0 is asked to be a bignumber need to really figure out the fix
     if x == "0" then
       return 0
     elseif x == "?" then -- another hack to deal with nontation commit's hacky method, turning all strings to bignumber

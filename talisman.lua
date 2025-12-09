@@ -186,6 +186,18 @@ if Talisman.config_file.break_infinity then
       return obj
   end
 
+  debug.setmetatable(0, {
+    __index = function(self, index)
+      if index == "array" then
+        return {self}
+      elseif index == "sign" then
+        return self >= 0 and 1 or -1
+      else
+        return assert(Big[index], "Attempt to index a number value")
+      end
+    end,
+  })
+
   local override_non_bigs = true
 
   local nf = number_format

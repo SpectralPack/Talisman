@@ -1540,6 +1540,18 @@ payload = '''
 G.ARGS.score_intensity.earned_score = math.min(to_number(G.GAME.current_round.current_hand.chips*G.GAME.current_round.current_hand.mult), 1e300)
 '''
 
+[[patches]] # keeping this patch for backward compat
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+position = 'at'
+match_indent = true
+pattern = '''
+G.ARGS.score_intensity.earned_score = SMODS.calculate_round_score(true)
+'''
+payload = '''
+G.ARGS.score_intensity.earned_score = math.min(to_number(SMODS.calculate_round_score(true)), 1e300)
+'''
+
 [[patches]]
 [patches.pattern]
 target = 'functions/misc_functions.lua'

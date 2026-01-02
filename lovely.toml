@@ -1546,10 +1546,10 @@ target = 'functions/misc_functions.lua'
 position = 'at'
 match_indent = true
 pattern = '''
-G.ARGS.score_intensity.earned_score = SMODS.calculate_round_score(true)
+G.ARGS.score_intensity.earned_score = all_numbers and SMODS.calculate_round_score(true) or 0
 '''
 payload = '''
-G.ARGS.score_intensity.earned_score = math.min(to_number(SMODS.calculate_round_score(true)), 1e300)
+G.ARGS.score_intensity.earned_score = all_numbers and math.min(to_number(SMODS.calculate_round_score(true)), 1e300) or 0
 '''
 
 # evaluate_play_final_scoring comparison

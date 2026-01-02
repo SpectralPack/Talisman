@@ -208,6 +208,14 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "if type(G.GAME.current_round.current_hand[name]) ~= 'number' then all_numbers = false end"
+position = "at"
+payload = "if not is_number(G.GAME.current_round.current_hand[name]) then all_numbers = false end"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = "main.lua"
 pattern = "if type(G.GAME.current_round.current_hand.chips) ~= 'number' or type(G.GAME.current_round.current_hand.mult) ~= 'number' then"
 position = "at"

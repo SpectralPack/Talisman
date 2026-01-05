@@ -12,6 +12,12 @@ return {
 	talisman_bignum = 'BigNum (ee308)',
 	talisman_omeganum = 'OmegaNum',
 
+	talisman_notation = 'Ký Hiệu số',
+
+	talisman_notations_hypere = 'Hyper-E',
+	talisman_notations_letter = 'Chữ Cái',
+	talisman_notations_array = 'Mảng',
+
 	talisman_string_A = 'Chọn tính năng để bật:',
 	talisman_string_B = 'Tắt Hoạt Ảnh Ghi Điểm',
 	talisman_string_C = 'Giới Hạn Điểm (yêu cầu khởi động lại)',

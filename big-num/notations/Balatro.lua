@@ -3,6 +3,7 @@ local nativefs = require("nativefs")
 Notation = nativefs.load(Talisman.mod_path.."/big-num/notations/notation.lua")()
 BalaNotation = {}
 BalaNotation.__index = BalaNotation
+BalaNotation.E_SWITCH_POINT = 100000000000
 BalaNotation.__tostring = function ()
     return "BalaNotation"
 end

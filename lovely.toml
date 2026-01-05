@@ -208,6 +208,14 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "if type(G.GAME.current_round.current_hand[name]) ~= 'number' then all_numbers = false end"
+position = "at"
+payload = "if not is_number(G.GAME.current_round.current_hand[name]) then all_numbers = false end"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = "main.lua"
 pattern = "if type(G.GAME.current_round.current_hand.chips) ~= 'number' or type(G.GAME.current_round.current_hand.mult) ~= 'number' then"
 position = "at"
@@ -293,7 +301,7 @@ match_indent = true
 target = "functions/UI_definitions.lua"
 pattern = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = 2*scale}),id = 'ante_UI_count'}},"
 position = "at"
-payload = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante_disp'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100)}),id = 'ante_UI_count'}},--{n=G.UIT.T, config={text = number_format(G.GAME.round_resets.ante), lang = G.LANGUAGES['en-us'], scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100), colour = G.C.IMPORTANT, shadow = true,id = 'ante_UI_count'}},"
+payload = "{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.round_resets, ref_value = 'ante_disp'}}, colours = {G.C.IMPORTANT},shadow = true, font = G.LANGUAGES['en-us'].font, scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100, 1000000)}),id = 'ante_UI_count'}},--{n=G.UIT.T, config={text = number_format(G.GAME.round_resets.ante, 1000000), lang = G.LANGUAGES['en-us'], scale = scale_number(G.GAME.round_resets.ante, 2*scale, 100, 1000000), colour = G.C.IMPORTANT, shadow = true,id = 'ante_UI_count'}},"
 match_indent = true
 
 [[patches]]
@@ -309,7 +317,10 @@ match_indent = true
 target = "functions/common_events.lua"
 pattern = "G.GAME.round_resets.ante = G.GAME.round_resets.ante + mod"
 position = "after"
-payload = "G.GAME.round_resets.ante_disp = number_format(G.GAME.round_resets.ante)"
+payload = '''
+G.GAME.round_resets.ante_disp = number_format(G.GAME.round_resets.ante, 1000000)
+ante_UI.config.object.scale = scale_number(G.GAME.round_resets.ante, 0.8, 100, 1000000)
+'''
 match_indent = true
 
 [[patches]]
@@ -1530,16 +1541,12 @@ G.ARGS.score_intensity.earned_score = math.min(to_number(G.GAME.current_round.cu
 '''
 
 [[patches]]
-[patches.pattern]
+[patches.regex]
 target = 'functions/misc_functions.lua'
 position = 'at'
 match_indent = true
-pattern = '''
-G.ARGS.score_intensity.earned_score = SMODS.calculate_round_score(true)
-'''
-payload = '''
-G.ARGS.score_intensity.earned_score = math.min(to_number(SMODS.calculate_round_score(true)), 1e300)
-'''
+pattern = '''SMODS\.calculate_round_score\(true\)'''
+payload = '''math.min(to_number(SMODS.calculate_round_score(true)), 1e300)'''
 
 # evaluate_play_final_scoring comparison
 [[patches]]

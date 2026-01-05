@@ -186,15 +186,10 @@ if Talisman.config_file.break_infinity then
       return obj
   end
 
-  local override_non_bigs = true
-
   local nf = number_format
   function number_format(num, e_switch_point)
-      if type(num) == 'table' or override_non_bigs then
-          --num = to_big(num)
-          if override_non_bigs then
-            num = to_big(num)
-          end
+      if is_number(num) then
+          num = to_big(num)
           if num.str then return num.str end
           if num:arraySize() > 2 then
             local str = Notations[Talisman.config_file.notation_key or Talisman.default_notation]:format(num, 3)
@@ -221,7 +216,7 @@ if Talisman.config_file.break_infinity then
       return mc(x)
   end
 
-function lenient_bignum(x)
+  function lenient_bignum(x)
     if type(x) == "number" then return x end
     if to_big(x) < to_big(1e300) and to_big(x) > to_big(-1e300) then
       return x:to_number()
@@ -229,15 +224,39 @@ function lenient_bignum(x)
     return x
   end
 
-  --prevent some log-related crashes
-  local sns = score_number_scale
-  function score_number_scale(scale, amt)
-    local ret = sns(scale, amt)
-    if type(ret) == "table" then
-      if ret > to_big(1e300) then return 1e300 end
-      return ret:to_number()
+  --despite the name, it only works best with m6x11plus\
+  --and only support the following characters: `0-9`, `e`, `{`, `}`, `,`,\
+  --`#` and `.` for the sake of number format simplicity
+  function tal_get_string_pixel_length(num)
+    if is_number(num) then
+      local num_text, length = number_format(num, G.E_SWITCH_POINT), 0
+      for i = 1, #num_text do
+        if string.sub(num_text, i, i) == "," or string.sub(num_text, i, i) == "." then
+          length = length + 3/6
+        elseif string.sub(num_text, i, i) == "{" or string.sub(num_text, i, i) == "}" then
+          length = length + 1
+        elseif string.sub(num_text, i, i) == "#" then
+          length = length + 8/6
+        else
+          length = length + 7/6
+        end
+      end
+      return length
     end
-    return ret
+  end
+
+  -- I'm completely overriding this since I don't think any other mods
+  -- would alter a text scale adjustment function (HuyTheKiller)
+  function score_number_scale(scale, amt)
+    G.E_SWITCH_POINT = Notations[Talisman.config_file.notation_key or Talisman.default_notation].E_SWITCH_POINT or G.E_SWITCH_POINT or 100000000000
+    if not is_number(amt) then return 0.7*(scale or 1) end
+    if to_big(amt) >= to_big(G.E_SWITCH_POINT) or Talisman.config_file.notation_key ~= "Balatro" then
+      return math.min(6/math.floor(tal_get_string_pixel_length(amt)+1), 0.7)*(scale or 1)
+    elseif to_big(amt) >= to_big(1000000) then
+      return 14*0.75/(math.floor(math.log(amt))+4)*(scale or 1)
+    else
+      return 0.75*(scale or 1)
+    end
   end
 
   local gftsj = G.FUNCS.text_super_juice
@@ -421,14 +440,14 @@ function lenient_bignum(x)
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number.str or number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
+    elseif math.abs(to_big(number)) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
       if number:arraySize() <= 2 and (number.array[1] or 0) <= 999 then --gross hack
         scale = scale*math.floor(math.log(max*10, 10))/7 --this divisor is a constant so im precalcualting it
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(max) then
-      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(number*10, 10))
+    elseif math.abs(to_big(number)) >= to_big(max) then
+      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(math.abs(number)*10, 10))
     end
     local scale = math.min(3, scale:to_number())
     number.scale = scale
@@ -955,7 +974,7 @@ end
 local g_start_run = Game.start_run
 function Game:start_run(args)
   local ret = g_start_run(self, args)
-  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante)
+  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante, 1000000)
   return ret
 end
 

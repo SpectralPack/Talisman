@@ -4,7 +4,7 @@
 --- MOD_AUTHOR: [MathIsFun_, Mathguy24, jenwalter666, cg, lord.ruby]
 --- MOD_DESCRIPTION: A mod that increases Balatro's score limit and skips scoring animations.
 --- PREFIX: talisman
---- VERSION: 2.6
+--- VERSION: 2.7
 
 ----------------------------------------------
 ------------MOD CODE -------------------------

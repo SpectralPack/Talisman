@@ -1182,6 +1182,31 @@ if SMODS and SMODS.calculate_individual_effect then
     table.insert(SMODS.scoring_parameter_keys or SMODS.calculation_keys, v)
   end
 
+  SMODS.Attribute({
+    key = "emult"
+  })
+  SMODS.Attribute({
+    key = "eemult"
+  })
+  SMODS.Attribute({
+    key = "eeemult"
+  })
+  SMODS.Attribute({
+    key = "hypermult"
+  })
+  SMODS.Attribute({
+    key = "echips"
+  })
+  SMODS.Attribute({
+    key = "eechips"
+  })
+  SMODS.Attribute({
+    key = "eeechips"
+  })
+  SMODS.Attribute({
+    key = "hyperchips"
+  })
+
   -- prvent juice animations
   local smce = SMODS.calculate_effect
   function SMODS.calculate_effect(effect, ...)

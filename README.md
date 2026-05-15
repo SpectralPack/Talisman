@@ -1,3 +1,8 @@
+# Deprecation
+Talisman will no longer be supported due to the existance of [Amulet](https://github.com/frostice482/amulet)
+
+Amulet is a fork of Talisman that fixes many of the issues present in Talisman so please use Amulet instead
+
 # Talisman
 A mod for Balatro that increases the score cap from ~10^308 to ~10{1000}10, allowing for endless runs to go past "naneinf" and Ante 39, and additionally adds the option to remove the long animations that come with these scores.
 
